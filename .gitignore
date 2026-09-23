@@ -4,6 +4,7 @@
 /pkg/
 /Gemfile.lock
 /Gemfile.local
+/Gemfile.simulation
 /vendor/
 /.vendor/
 /spec/fixtures/manifests/
@@ -23,3 +24,9 @@
 /Guardfile
 bolt-debug.log
 .rerun.json
+
+# Local test environment artifacts and draft extracts.
+/windows-root-ca.pem
+/3.13
+/7
+/draft-specs/

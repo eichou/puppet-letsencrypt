@@ -1,0 +1,4 @@
+---
+# SLES 15.x (15.4-15.7) version-scoped package mapping.
+# Keep this file for SLES 15 service-pack-specific overrides only.
+{}
