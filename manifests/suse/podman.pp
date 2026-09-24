@@ -90,29 +90,29 @@ class letsencrypt::suse::podman (
   # Manage Azure plugin config if requested
   if $manage_azure_config and $azure_config_content != undef {
     file { $azure_config_file:
-      ensure    => file,
-      owner     => 'root',
-      group     => 0,
-      mode      => '0600',
-      content   => $azure_config_content,
-      require   => File[$letsencrypt_dir],
+      ensure  => file,
+      owner   => 'root',
+      group   => 0,
+      mode    => '0600',
+      content => $azure_config_content,
+      require => File[$letsencrypt_dir],
     }
   }
 
   # Create certbot wrapper script for convenient invocation
   file { "${certbot_wrapper_dir}/certbot-podman.sh":
-    ensure    => file,
-    owner     => 'root',
-    group     => 0,
-    mode      => '0755',
-    content   => epp('letsencrypt/suse/certbot-podman.sh.epp', {
-      container_image    => $container_image,
-      container_tag      => $container_tag,
-      letsencrypt_dir    => $letsencrypt_dir,
-      azure_config_file  => $azure_config_file,
+    ensure  => file,
+    owner   => 'root',
+    group   => 0,
+    mode    => '0755',
+    content => epp('letsencrypt/suse/certbot-podman.sh.epp', {
+      container_image     => $container_image,
+      container_tag       => $container_tag,
+      letsencrypt_dir     => $letsencrypt_dir,
+      azure_config_file   => $azure_config_file,
       manage_azure_config => $manage_azure_config,
     }),
-    require   => [File[$certbot_wrapper_dir], File[$letsencrypt_dir]],
+    require => [File[$certbot_wrapper_dir], File[$letsencrypt_dir]],
   }
 
   # Create certbot renewal cron job

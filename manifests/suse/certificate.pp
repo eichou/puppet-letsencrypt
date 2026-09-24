@@ -59,25 +59,25 @@ define letsencrypt::suse::certificate (
   }
 
   if $plugin == 'dns-01' {
-      class { 'letsencrypt::plugin::dns_azure':
-        config_path => $azure_config_file,
-      }
+    class { 'letsencrypt::plugin::dns_azure':
+      config_path => $azure_config_file,
+    }
 
-      if $validate_azure_config {
-        exec { "letsencrypt-suse-certificate-preflight-${title}":
-          # lint:ignore:140chars
-          command => "/bin/sh -c 'echo \"dns-azure config file is not readable for ${title}. Verify ${azure_config_file} exists and is readable by root.\" 1>&2; exit 1'",
-          # lint:endignore
-          unless  => "/bin/sh -c 'test -r ${azure_config_file}'",
-          path    => ['/usr/sbin', '/usr/bin', '/bin'],
-          require => Class['letsencrypt::plugin::dns_azure'],
-        }
+    if $validate_azure_config {
+      exec { "letsencrypt-suse-certificate-preflight-${title}":
+        # lint:ignore:140chars
+        command => "/bin/sh -c 'echo \"dns-azure config file is not readable for ${title}. Verify ${azure_config_file} exists and is readable by root.\" 1>&2; exit 1'",
+        # lint:endignore
+        unless  => "/bin/sh -c 'test -r ${azure_config_file}'",
+        path    => ['/usr/sbin', '/usr/bin', '/bin'],
+        require => Class['letsencrypt::plugin::dns_azure'],
       }
+    }
 
-      $certonly_requires = $validate_azure_config ? {
-        true    => [Class['letsencrypt::plugin::dns_azure'], Exec["letsencrypt-suse-certificate-preflight-${title}"]],
-        default => [Class['letsencrypt::plugin::dns_azure']],
-      }
+    $certonly_requires = $validate_azure_config ? {
+      true    => [Class['letsencrypt::plugin::dns_azure'], Exec["letsencrypt-suse-certificate-preflight-${title}"]],
+      default => [Class['letsencrypt::plugin::dns_azure']],
+    }
     $certonly_plugin = 'dns-azure'
   } else {
     $certonly_requires = []

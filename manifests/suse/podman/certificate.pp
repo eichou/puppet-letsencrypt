@@ -3,6 +3,11 @@
 # This define keeps certificate issuance idempotent while leaving certbot
 # execution inside the wrapper managed by letsencrypt::suse::podman.
 #
+# @param ensure Desired certificate state.
+# @param domains Domains included in the certificate request.
+# @param cert_name Certbot certificate name.
+# @param additional_args Additional arguments passed to the wrapper.
+#
 define letsencrypt::suse::podman::certificate (
   Enum['present', 'absent'] $ensure = 'present',
   Array[String[1]] $domains = [$title],
